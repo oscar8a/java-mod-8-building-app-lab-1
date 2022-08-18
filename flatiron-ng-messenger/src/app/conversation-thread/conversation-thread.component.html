@@ -1,21 +1,16 @@
-<div class="container">
+<div class="container" *ngFor="let senderMessage of senderMessages">
   <div class="row">
     <div class="col-9 p-3">
-      <app-sender-message></app-sender-message>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-9 p-3">
-      <app-sender-message></app-sender-message>
+      <app-sender-message [message]="senderMessage"></app-sender-message>
     </div>
   </div>
 </div>
 
-<div class="container">
+<div class="container" *ngFor="let userMessage of userMessages">
   <div class="row">
     <div class="col-3 p-3"></div>
     <div class="col-9 p-3">
-      <app-user-message></app-user-message>
+      <app-user-message [message]="userMessage"></app-user-message>
     </div>
   </div>
 </div>

@@ -6,6 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./contact-list.component.css']
 })
 export class ContactListComponent implements OnInit {
+  users = [
+    { firstName: "Aurelie" },
+    { firstName: "James" },
+    { firstName: "Jessica" },
+    { firstName: "Ludovic" },
+    { firstName: "Maria" },
+  ];
 
   constructor() { }
 

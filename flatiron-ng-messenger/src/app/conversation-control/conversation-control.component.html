@@ -6,9 +6,14 @@
           Conversation
         </button>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Ludovic, Jessica</a></li>
-          <li><a class="dropdown-item" href="#">James</a></li>
-          <li><a class="dropdown-item" href="#">Aurelie, James, Jessica</a></li>
+          <li *ngFor="let conversation of conversations">
+            <a class="dropdown-item" href="#">
+              <span *ngFor="let user of conversation.users; 
+                            let isLastConversation = last">
+                {{ user.firstName }}
+                <span *ngIf="!isLastConversation">, </span>
+              </span>
+            </a>
         </ul>
       </div>
     </div>
