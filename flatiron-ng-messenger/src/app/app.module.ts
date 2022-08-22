@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
+import { FormsModule } from "@angular/forms";
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { SenderMessageComponent } from './sender-message/sender-message.component';
 import { SendMessageComponent } from './send-message/send-message.component';
@@ -11,6 +12,7 @@ import { ConversationHistoryComponent } from './conversation-history/conversatio
 import { ConversationControlComponent } from './conversation-control/conversation-control.component';
 import { HeaderComponent } from './header/header.component';
 import { ContactComponent } from './contact/contact.component';
+import { HighlightDirective } from './highlightdirective/highlight.directive';
 
 @NgModule({
   declarations: [
@@ -23,10 +25,12 @@ import { ContactComponent } from './contact/contact.component';
     ConversationHistoryComponent,
     ConversationControlComponent,
     HeaderComponent,
-    ContactComponent
+    ContactComponent,
+    HighlightDirective
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
