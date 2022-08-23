@@ -1,144 +1,99 @@
-# Application Building Lab 3
+# Lab 2
 
 ## Instructions
 
-Using the same patterns we've used so far, replace the data in the conversation
-thread component with dynamic data read from variables defined in the
-component's controllers.
+Using what you've learned about components and services, create a new component
+that will display the number of messages sent by the active user.
 
-As before, try your best to do this on your own before looking at the code
-provided here for reference.
+Here are a few hints:
 
-The steps are:
+1. Your new component can be positioned below the user message component at the
+   bottom of the conversation history panel
+2. It can be a simple label that shows the text "total message(s): " and then
+   the number of messages sent by the active user
+3. You already have a service that handles the sending of messages - integrate
+   with that service to get your component access to the information it's
+   looking for
 
-1. Add a `senderMessages` array to `conversation-thread-component.component.ts`
-2. Add a `userMessages` array to `conversation-thread-component.component.ts`
-   > We will have additional work to do to figure out how to show the messages
-   > in the right sequence, but we will handle that later in the source
-3. Modify the `conversation-thread-component.comopnent.html` view to use both
-   arrays defined in the model
-4. Add a `message` variable in the `user-message-component.component.ts` file.
-   Make sure to tag it with the `@Input` annotation, so you can set its value in
-   the parent component's view
-5. Modify the `user-message-component.component.html` view to use the
-   `message.text` property instead of hardcoded text
+Here is the solution:
 
-## Solution
+1. In your `messaging-data.service.ts`, you already have a `addUserMessage()`
+   function - no messages get sent through your application without going
+   through this function.
+2. Furthermore, that function already emits an event after it's done handling
+   the requested message
+3. So all we need to do in our new component is subscribe to the existing event
+   and use the corresponding data to update a local variable with the active
+   number of messages
+4. We then simply use `{{ }}` notation to bind to that variable in our view
 
-When you're done with your changes, your source files will look like this:
+Here is the code for this solution:
 
-### `conversation-thread-component.component.ts`
+> Note: we used the following CLI command to generate the new component:
+> `ng g c application-component/conversation-history-component/message-count-component`
+
+- Inject the `MessagingDataService` into the message count component:
 
 ```typescript
 import { Component, OnInit } from "@angular/core";
+import { MessagingDataService } from "src/app/messaging-data.service";
+import { Message } from "src/app/message.model";
 
 @Component({
-  selector: "app-conversation-thread-component",
-  templateUrl: "./conversation-thread-component.component.html",
-  styleUrls: ["./conversation-thread-component.component.css"],
+  selector: "app-message-count-component",
+  templateUrl: "./message-count-component.component.html",
+  styleUrls: ["./message-count-component.component.css"],
 })
-export class ConversationThreadComponentComponent implements OnInit {
-  senderMessages = [
-    {
-      sender: { firstName: "Ludovic" },
-      text: "Message from Ludovic",
-      conversationId: 1,
-      sequenceNumber: 0,
-    },
-    {
-      sender: { firstName: "Jessica" },
-      text: "Message from Jessica",
-      conversationId: 1,
-      sequenceNumber: 1,
-    },
-  ];
+export class MessageCountComponentComponent implements OnInit {
+  sentMessageCount = 0;
 
-  userMessages = [
-    {
-      sender: { firstName: "Aurelie" },
-      text: "Message from Aurelie",
-      conversationId: 1,
-      sequenceNumber: 2,
-    },
-  ];
-  constructor() {}
+  constructor(private messagingSvce: MessagingDataService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.messagingSvce.userMessagesChanged.subscribe((messages: Message[]) => {
+      this.sentMessageCount = messages.length;
+    });
+  }
 }
 ```
 
-### `conversation-thread-component.component.html`
+- Add our simple text to the view for our message count component:
 
 ```html
-<div class="container">
-  <div class="row" *ngFor="let senderMessage of senderMessages">
-    <div class="col-9 p-3">
-      <app-sender-message-component
-        [message]="senderMessage"
-      ></app-sender-message-component>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row" *ngFor="let userMessage of userMessages">
-    <div class="col-3 p-3"></div>
-    <div class="col-9 p-3">
-      <app-user-message-component
-        [message]="userMessage"
-      ></app-user-message-component>
-    </div>
-  </div>
-</div>
+total message(s): {{ sentMessageCount }}
 ```
 
-### `user-message-component.component.ts`
-
-```typescript
-import { Component, Input, OnInit } from "@angular/core";
-
-@Component({
-  selector: "app-user-message-component",
-  templateUrl: "./user-message-component.component.html",
-  styleUrls: ["./user-message-component.component.css"],
-})
-export class UserMessageComponentComponent implements OnInit {
-  @Input() message = {
-    sender: { firstName: "Ludovic" },
-    text: "Message from Ludovic",
-    conversationId: 1,
-    sequenceNumber: 0,
-  };
-
-  constructor() {}
-
-  ngOnInit(): void {}
-}
-```
-
-### `user-message-component.component.html`
+- Add the message count component to the conversation history component in
+   `conversation-history-comopnent.component.html`:
 
 ```html
 <div class="container">
   <div class="row">
-    <div class="col-2 p-3"></div>
-    <div class="col-10 p-3 border rounded-5">
-      <span>{{message.text}}</span>
+    <div class="col-12 p-3">Ludovic, Jessica</div>
+  </div>
+  <div class="row">
+    <div class="col-12 border p-3">
+      <app-conversation-thread-component></app-conversation-thread-component>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12 p-3">
+      <app-send-message-component></app-send-message-component>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12 p-3">
+      <app-message-count-component></app-message-count-component>
     </div>
   </div>
 </div>
 ```
 
-Now you have an application that:
-
-1. Leverages Bootstrap to have the target layout
-2. Leverages Bootstrap for basic styling
-3. Leverages Angular data binding to read data dynamic from TypeScript code
-   instead of hardcoding it in HTML
-4. Leverages Angular directives to modify the DOM by looping through arrays and
-   using conditionals to decide whether or not to display specific values or
-   text
-
-We've successfully used our current Angular knowledge to create a strong
-foundation for our application. In order to add real functionality, however, we
-need to dive deeper into Angular features.
+- Remove the `message-count-component.component.spec.ts` file, since we won't
+   be writing unit tests for this component
