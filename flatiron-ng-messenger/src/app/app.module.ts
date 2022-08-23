@@ -13,6 +13,9 @@ import { ConversationControlComponent } from './conversation-control/conversatio
 import { HeaderComponent } from './header/header.component';
 import { ContactComponent } from './contact/contact.component';
 import { HighlightDirective } from './highlightdirective/highlight.directive';
+import { MessagingDataService } from './messaging-data.service';
+import { LoggingService } from './logging.service';
+import { MessageCountComponent } from './conversation-history/message-count/message-count.component';
 
 @NgModule({
   declarations: [
@@ -26,13 +29,17 @@ import { HighlightDirective } from './highlightdirective/highlight.directive';
     ConversationControlComponent,
     HeaderComponent,
     ContactComponent,
-    HighlightDirective
+    HighlightDirective,
+    MessageCountComponent
   ],
   imports: [
     BrowserModule,
     FormsModule
   ],
-  providers: [],
+  providers: [
+    LoggingService,
+    MessagingDataService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
