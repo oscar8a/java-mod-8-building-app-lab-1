@@ -16,6 +16,7 @@ import { HighlightDirective } from './highlightdirective/highlight.directive';
 import { MessagingDataService } from './messaging-data.service';
 import { LoggingService } from './logging.service';
 import { MessageCountComponent } from './conversation-history/message-count/message-count.component';
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { MessageCountComponent } from './conversation-history/message-count/mess
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [
     LoggingService,

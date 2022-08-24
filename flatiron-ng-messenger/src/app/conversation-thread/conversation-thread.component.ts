@@ -19,8 +19,12 @@ export class ConversationThreadComponent implements OnInit {
     this.userMessages = this.messagingService.getUserMessages();
 
     this.messagingService.userMessagesChanged.subscribe((messages: Message[]) => {
-      console.log("********** messages have changed");
+      console.log("********** user messages have changed");
       this.userMessages = messages;
+    });
+    this.messagingService.senderMessagesChanged.subscribe((messages: Message[]) => {
+      console.log("********** sender messages have changed");
+      this.senderMessages = messages;
     });
   }
 }
